@@ -4,10 +4,7 @@ const args = process.argv.slice(2);
 
 switch(args[0]) {
     case 'list':
-        console.log(new Task().list());
-        break;
-    case 'listByStatus':
-        console.log(new Task().listByStatus(args[1]));
+        args.length === 1 ? console.log(new Task().list()) : console.log(new Task().listByStatus(args[1]));
         break;
     case 'add':
         new Task().createNewTask(args[1]);
