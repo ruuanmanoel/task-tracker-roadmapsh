@@ -2,7 +2,7 @@ import fs from "fs";
 
 class Task {
     constructor() {}
-
+    
     createNewTask(description) {
         const tasks = this.list();
         const { id } = tasks.at(-1) || { id: 0 };
@@ -19,6 +19,7 @@ class Task {
     }
 
     list() {
+        fs.existsSync("task.json") || fs.writeFileSync("task.json", "[]");
         const data = fs.readFileSync("task.json", "utf-8");
         return JSON.parse(data);
     }
