@@ -21,5 +21,5 @@ switch(args[0]) {
         new Task().updateTaskStatus(parseInt(args[1]), status);
         break;
     default:
-        console.log('Invalid command. Use "list" or "listByStatus <status>".');
+        console.log('Invalid command. Use: \n"list" - Lista todas as tarefas\n"list <status>" - Lista as tarefas do status selecionado\n "add <description>" - Adiciona uma nova atividade\n"update <id> <new description>" - Atualiza a descrição de uma tarefa\n"delete <id>" - Deleta uma atividade\n"mark-in-progress <id>" - Marca o status de uma atividade como "in-progress"\n"mark-done <id>" - Marca o status de uma atividade como "done"');
 }
