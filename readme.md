@@ -1,293 +1,219 @@
+# Task Tracker CLI
 
-# Task Tracker CLI 📝
+Aplicação de linha de comando (CLI) para criar, consultar, atualizar e
+remover tarefas. Os dados ficam persistidos localmente em um arquivo JSON,
+sem banco de dados, frameworks ou dependências externas.
 
-A simple command-line interface (CLI) application for tracking and managing tasks.
+## Funcionalidades
 
-This project was developed using **Node.js** and **JavaScript**, with the goal of practicing command-line arguments, file system operations, JSON persistence, and CRUD operations.
+- Criar tarefas com descrição, identificador e datas de criação e atualização.
+- Listar todas as tarefas.
+- Filtrar tarefas por status.
+- Editar a descrição de uma tarefa existente.
+- Marcar uma tarefa como em andamento ou concluída.
+- Excluir tarefas.
+- Criar automaticamente o arquivo de dados quando ele ainda não existe.
 
-## 🚀 Technologies
+## Tecnologias
 
--   [Node.js](https://nodejs.org/)
--   JavaScript
--   JSON
--   Node.js File System (`fs`)
+- [Node.js](https://nodejs.org/)
+- JavaScript com módulos ES (`type: module`)
+- Módulo nativo `fs` do Node.js
+- JSON para persistência dos dados
 
-No external libraries or frameworks are used in this project.
+Nenhuma biblioteca externa é necessária.
 
-## 📋 Features
+## Requisitos
 
-The application allows you to:
+- Node.js com suporte a `Array.prototype.at` e módulos ES.
+- Um terminal para executar os comandos.
 
--   ✅ Add tasks
--   ✏️ Update tasks
--   🗑️ Delete tasks
--   🔄 Mark tasks as in progress
--   ✔️ Mark tasks as done
--   📋 List all tasks
--   ⏳ List pending tasks
--   🔄 List tasks in progress
--   ✅ List completed tasks
+Confira a instalação do Node.js com:
 
-## 📦 Task Properties
+```bash
+node --version
+```
 
-Each task contains the following properties:
+## Instalação
 
-Property
+Clone o repositório e entre na pasta do projeto:
 
-Description
+```bash
+git clone https://github.com/ruuanmanoel/task-tracker-roadmapsh.git
+cd task-tracker
+```
 
-`id`
+O projeto não possui dependências de produção. Portanto, não é necessário
+executar `npm install` para usar a CLI.
 
-A unique identifier for the task
+## Uso
 
-`description`
+Todos os comandos seguem o formato:
 
-A short description of the task
+```bash
+node main.js <comando> [argumentos]
+```
 
-`status`
+### Adicionar uma tarefa
 
-The task status: `todo`, `in-progress`, or `done`
+Use uma descrição entre aspas quando ela tiver espaços:
 
-`createdAt`
+```bash
+node main.js add "Estudar JavaScript"
+```
 
-Date and time when the task was created
+Saída esperada:
 
-`updatedAt`
+```text
+Task added successfully (ID: 1)
+```
 
-Date and time when the task was last updated
+Novas tarefas recebem o status `todo` e um ID sequencial baseado na última
+tarefa do arquivo.
 
-Example:
+### Listar todas as tarefas
+
+```bash
+node main.js list
+```
+
+A saída é um array JSON impresso no terminal. Se `task.json` não existir, ele
+será criado com um array vazio (`[]`).
+
+### Filtrar por status
+
+```bash
+node main.js list todo
+node main.js list in-progress
+node main.js list done
+```
+
+Os três status usados pela aplicação são:
+
+| Status | Significado |
+| --- | --- |
+| `todo` | Tarefa pendente, ainda não iniciada |
+| `in-progress` | Tarefa em andamento |
+| `done` | Tarefa concluída |
+
+### Atualizar a descrição
+
+```bash
+node main.js update 1 "Estudar JavaScript e Node.js"
+```
+
+O campo `updatedAt` também é alterado. O ID deve ser um número inteiro.
+
+### Marcar como em andamento
+
+```bash
+node main.js mark-in-progress 1
+```
+
+### Marcar como concluída
+
+```bash
+node main.js mark-done 1
+```
+
+As duas operações atualizam o status e o campo `updatedAt`.
+
+### Excluir uma tarefa
+
+```bash
+node main.js delete 1
+```
+
+A tarefa é removida permanentemente de `task.json`.
+
+## Exemplo completo
+
+```bash
+node main.js add "Estudar JavaScript"
+node main.js add "Ir à academia"
+node main.js add "Ler um livro"
+
+node main.js list
+node main.js mark-in-progress 1
+node main.js mark-done 2
+node main.js update 3 "Ler um livro técnico"
+
+node main.js list done
+node main.js list in-progress
+node main.js list todo
+node main.js delete 3
+```
+
+## Persistência dos dados
+
+As tarefas são salvas no arquivo `task.json`, na pasta em que o comando é
+executado. O arquivo é atualizado a cada criação, alteração de descrição,
+alteração de status ou exclusão.
+
+Exemplo de uma tarefa:
 
 ```json
 {
   "id": 1,
-  "description": "Buy groceries",
-  "status": "todo",
+  "description": "Estudar JavaScript",
+  "status": "in-progress",
   "createdAt": "2026-09-02T21:00:00.000Z",
-  "updatedAt": "2026-09-02T21:00:00.000Z"
+  "updatedAt": "2026-09-02T21:30:00.000Z"
 }
-
 ```
 
-## 📁 Project Structure
+### Campos da tarefa
+
+| Campo | Descrição |
+| --- | --- |
+| `id` | Identificador numérico da tarefa |
+| `description` | Texto descritivo da tarefa |
+| `status` | `todo`, `in-progress` ou `done` |
+| `createdAt` | Data de criação em formato ISO 8601 |
+| `updatedAt` | Data da última alteração em formato ISO 8601 |
+
+## Estrutura do projeto
 
 ```text
 task-tracker/
-├── src/
-│   └── index.js
-├── tasks.json
-├── package.json
-├── package-lock.json
-└── README.md
-
+|-- main.js       # Entrada da CLI e roteamento dos comandos
+|-- taskModel.js  # Operações de leitura, escrita e manipulação das tarefas
+|-- task.json     # Dados persistidos localmente
+|-- package.json  # Metadados e configuração do Node.js
+`-- readme.md     # Documentação do projeto
 ```
 
-The `tasks.json` file is automatically created if it doesn't exist.
-
-## ⚙️ Installation
-
-### 1. Clone the repository
-
-```bash
-git clone <repository-url>
-
-```
-
-### 2. Navigate to the project directory
-
-```bash
-cd task-tracker
-
-```
-
-### 3. Install dependencies
-
-This project does not use external dependencies, but you can install the project with:
-
-```bash
-npm install
-
-```
-
-## 💻 Usage
-
-The application uses positional command-line arguments.
-
-### Add a task
-
-```bash
-node src/index.js add "Buy groceries"
-
-```
-
-Output:
-
-```text
-Task added successfully (ID: 1)
-
-```
-
-### Update a task
-
-```bash
-node src/index.js update 1 "Buy groceries and cook dinner"
-
-```
-
-### Delete a task
-
-```bash
-node src/index.js delete 1
-
-```
-
-### Mark task as in progress
-
-```bash
-node src/index.js mark-in-progress 1
-
-```
-
-### Mark task as done
-
-```bash
-node src/index.js mark-done 1
-
-```
-
-### List all tasks
-
-```bash
-node src/index.js list
-
-```
-
-### List completed tasks
-
-```bash
-node src/index.js list done
-
-```
-
-### List pending tasks
-
-```bash
-node src/index.js list todo
-
-```
-
-### List tasks in progress
-
-```bash
-node src/index.js list in-progress
-
-```
-
-## 🧪 Example
-
-A complete example of using the CLI:
-
-```bash
-node src/index.js add "Study JavaScript"
-node src/index.js add "Go to the gym"
-node src/index.js add "Read a book"
-
-node src/index.js list
-
-node src/index.js mark-in-progress 1
-node src/index.js mark-done 2
-
-node src/index.js list done
-node src/index.js list in-progress
-node src/index.js list todo
-
-```
-
-## 🗃️ Data Storage
-
-Tasks are stored locally in a `tasks.json` file.
-
-Example:
-
-```json
-[
-  {
-    "id": 1,
-    "description": "Study JavaScript",
-    "status": "in-progress",
-    "createdAt": "2026-09-02T21:00:00.000Z",
-    "updatedAt": "2026-09-02T21:30:00.000Z"
-  },
-  {
-    "id": 2,
-    "description": "Go to the gym",
-    "status": "done",
-    "createdAt": "2026-09-02T21:01:00.000Z",
-    "updatedAt": "2026-09-02T21:35:00.000Z"
-  }
-]
-
-```
-
-## 🛡️ Error Handling
-
-The application handles common errors gracefully, such as:
-
--   Invalid task IDs
--   Tasks that don't exist
--   Empty task descriptions
--   Invalid commands
--   Invalid task statuses
--   Missing `tasks.json`
--   Invalid JSON data
-
-## 🎯 Learning Goals
-
-This project was created to practice the following concepts:
-
--   Node.js
--   JavaScript
--   CLI applications
--   `process.argv`
--   File system operations with `fs`
--   Reading and writing JSON files
--   CRUD operations
--   Array manipulation
--   Date and time handling
--   Error handling
--   Git and GitHub
-
-## 📌 Challenge Requirements
-
-The application follows these requirements:
-
--   Run from the command line
--   Accept user input as positional arguments
--   Store tasks in a JSON file
--   Create the JSON file if it doesn't exist
--   Use Node.js native file system APIs
--   Avoid external libraries and frameworks
--   Handle errors and edge cases
--   Add tasks
--   Update tasks
--   Delete tasks
--   Mark tasks as in progress
--   Mark tasks as done
--   List tasks
--   Filter tasks by status
-
-## 📚 What I Learned
-
-Through this project, I practiced building a CLI application with Node.js and learned how to:
-
--   Work with command-line arguments using `process.argv`
--   Manipulate files using Node.js `fs`
--   Persist application data using JSON
--   Create and update objects dynamically
--   Implement CRUD functionality
--   Validate user input
--   Handle errors in a CLI application
-
-## 👨‍💻 Author
-
-Developed as part of a programming challenge to practice Node.js and JavaScript.
+## Comportamento e limitações atuais
+
+- Mensagens de sucesso e erro são exibidas em inglês porque fazem parte da
+  implementação atual.
+- Um ID inexistente não altera o arquivo e produz uma mensagem informativa.
+- Um comando desconhecido exibe uma mensagem de uso básica.
+- O programa espera que os argumentos necessários sejam fornecidos na ordem
+  correta.
+- A descrição é recebida diretamente como argumento; não há validação
+  dedicada para descrição vazia.
+- O filtro por status compara o texto exatamente. Valores diferentes de
+  `todo`, `in-progress` e `done` apenas retornam uma lista vazia.
+- O arquivo JSON precisa conter dados válidos para ser lido corretamente.
+- O ID de uma nova tarefa é calculado a partir da última tarefa do arquivo;
+  como o arquivo é um array ordenado, a aplicação presume que a última tarefa
+  possui o maior ID.
+
+## Aprendizados praticados
+
+Este projeto exercita:
+
+- Leitura de argumentos com `process.argv`.
+- Criação de uma CLI com comandos posicionais.
+- Leitura e escrita de arquivos usando `fs`.
+- Persistência e serialização com JSON.
+- Operações CRUD (criar, consultar, atualizar e excluir).
+- Filtragem e manipulação de arrays.
+- Uso de datas no formato ISO 8601.
+- Organização de responsabilidades entre o arquivo de entrada e o modelo.
+
+## Licença
+
+Este projeto está publicado sob a licença ISC, conforme definido em
+`package.json`.
