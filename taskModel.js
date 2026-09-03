@@ -28,6 +28,43 @@ class Task {
         return tasks.filter(task => task.status === status);
     }
 
+    updateTask(id, newDescription) {
+        const tasks = this.list();
+        const taskIndex = tasks.findIndex(task => task.id === id);
+        if (taskIndex === -1) {
+            console.log(`Task with ID ${id} not found.`);
+            return;
+        }
+        tasks[taskIndex].description = newDescription;
+        tasks[taskIndex].updatedAt = new Date().toISOString();
+        fs.writeFileSync("task.json", JSON.stringify(tasks, null, 2));
+        console.log(`Task with ID ${id} updated successfully.`);
+    }
+
+    updateTaskStatus(id, newStatus) {
+        const tasks = this.list();
+        const taskIndex = tasks.findIndex(task => task.id === id);
+        if (taskIndex === -1) {
+            console.log(`Task with ID ${id} not found.`);
+            return;
+        }
+        tasks[taskIndex].status = newStatus;
+        tasks[taskIndex].updatedAt = new Date().toISOString();
+        fs.writeFileSync("task.json", JSON.stringify(tasks, null, 2));
+        console.log(`Task with ID ${id} status updated successfully.`);
+    }
+
+    deleteTask(id) {
+        const tasks = this.list();
+        const taskIndex = tasks.findIndex(task => task.id === id);  
+        if (taskIndex === -1) {
+            console.log(`Task with ID ${id} not found.`);
+            return;
+        }
+        tasks.splice(taskIndex, 1);
+        fs.writeFileSync("task.json", JSON.stringify(tasks, null, 2));
+        console.log(`Task with ID ${id} deleted successfully.`);
+    }
 
 
 }
